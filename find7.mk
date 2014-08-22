@@ -26,6 +26,11 @@ PRODUCT_PACKAGES += \
     init.qcom.rc \
     init.qcom.usb.rc
 
+# LVM
+PRODUCT_PACKAGES += \
+    lvm \
+    lvm.conf
+
 # Audio
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \

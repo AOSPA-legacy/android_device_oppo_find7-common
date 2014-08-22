@@ -22,9 +22,17 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    fstab.qcom \
+    fstab.qcom.std \
+    fstab.qcom.lvm \
+    lvm \
+    lvm.conf \
+    init.fs.rc.std \
+    init.fs.rc.lvm \
     init.qcom.rc \
-    init.qcom.usb.rc
+    init.qcom.usb.rc \
+    lvm_init.sh \
+    lvm_setprop.sh \
+    lvm_symlinks.sh
 
 # Audio
 PRODUCT_COPY_FILES += \

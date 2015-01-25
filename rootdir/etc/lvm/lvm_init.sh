@@ -1,7 +1,5 @@
-#!/sbin/static/busybox sh
-set +x
-_PATH="$PATH"
-export PATH=/sbin
+#!/sbin/static/busybox
+export PATH=/sbin/static:/sbin
 
 #don't use -f here - this is not a regular file
 #Check if an LV for userdata exists, if it does

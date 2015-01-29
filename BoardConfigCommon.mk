@@ -18,6 +18,8 @@
 -include device/oppo/msm8974-common/BoardConfigCommon.mk
 
 # Kernel
+BOARD_CUSTOM_BOOTIMG_MK := device/oppo/find7-common/mkbootimg.mk
+BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01e00000
 BOARD_KERNEL_CMDLINE := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1
 TARGET_KERNEL_CONFIG := custom_find7_defconfig
 

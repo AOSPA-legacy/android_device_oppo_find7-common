@@ -24,6 +24,10 @@ $(INSTALLED_DTIMAGE_TARGET): $(DTBTOOL) $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/u
 	$(hide) $(DTBTOOL) -2 -o $(INSTALLED_DTIMAGE_TARGET) -s $(BOARD_KERNEL_PAGESIZE) -p $(KERNEL_OUT)/scripts/dtc/ $(KERNEL_OUT)/arch/arm/boot/
 	@echo -e ${CL_CYN}"Made DT image: $@"${CL_RST}
 
+ $(TARGET_ROOT_OUT)/sbin/static/busybox: $(PRODUCT_OUT)/utilities/busybox
+	@echo -e ${CL_CYN}"----- Copying static busybox to ramdisk ------"${CL_RST}
+	$(hide) mkdir -p $(TARGET_ROOT_OUT)/sbin/static
+	$(hide) cp $(PRODUCT_OUT)/utilities/busybox $(TARGET_ROOT_OUT)/sbin/static/busybox
 
 ## Overload bootimg generation: Same as the original, + --dt arg
 $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTIMG) $(INTERNAL_BOOTIMAGE_FILES) $(INSTALLED_DTIMAGE_TARGET)

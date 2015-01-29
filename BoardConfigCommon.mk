@@ -42,5 +42,9 @@ TARGET_RECOVERY_FSTAB := device/oppo/find7-common/rootdir/etc/fstab.qcom
 
 AUDIO_FEATURE_LOW_LATENCY_PRIMARY := true
 
+# Sepolicy
+BOARD_SEPOLICY_DIRS += \
+    device/oppo/find7-common/sepolicy
+
 # Inherit from the proprietary version
 -include vendor/oppo/find7/BoardConfigVendor.mk

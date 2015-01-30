@@ -53,6 +53,7 @@ BOARD_SEPOLICY_DIRS += \
     
 BOARD_SEPOLICY_UNION += \
     init.te
+    init_shell.te
 
 # Inherit from the proprietary version
 -include vendor/oppo/find7/BoardConfigVendor.mk

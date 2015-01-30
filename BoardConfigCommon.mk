@@ -17,6 +17,9 @@
 # Inherit from msm8974-common
 -include device/oppo/msm8974-common/BoardConfigCommon.mk
 
+# Init
+TARGET_INIT_VENDOR_LIB := libinit_find7
+
 # Kernel
 BOARD_CUSTOM_BOOTIMG_MK := device/oppo/find7-common/mkbootimg.mk
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000 --tags_offset 0x01e00000

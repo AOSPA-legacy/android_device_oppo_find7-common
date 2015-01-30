@@ -52,6 +52,11 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_DTIMAGE_TARGET) \
 	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/lvm_init_recovery.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin
 	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/twrp.fstab.std $(TARGET_RECOVERY_ROOT_OUT)/etc
 	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/twrp.fstab.lvm $(TARGET_RECOVERY_ROOT_OUT)/etc
+	## TWRP build are universal for find7s/find7a, unified/non-unified
+	## ro.product.device is set in init	to find7/find7a
+	$(hide) sed -ie 's/^\(ro.product.device=\)/# \1/' $(TARGET_RECOVERY_ROOT_OUT)/default.prop
+	## set obsolete ro.build.product to a generic "find7" for older install-scripts
+	$(hide) sed -ie 's/^\(ro.build.product=\).*/\1find7/' $(TARGET_RECOVERY_ROOT_OUT)/default.prop
 	@echo -e ${CL_CYN}"----- Making recovery image ------"${CL_RST}
 	$(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --dt $(INSTALLED_DTIMAGE_TARGET) --output $@
 	$(hide) $(call assert-max-image-size,$@,$(BOARD_RECOVERYIMAGE_PARTITION_SIZE),raw)

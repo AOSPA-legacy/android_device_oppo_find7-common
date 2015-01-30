@@ -54,6 +54,30 @@ LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE       := storage_earlyinit.sh
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_SRC_FILES    := etc/storage_earlyinit.sh
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := storage_init.sh
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_SRC_FILES    := etc/storage_init.sh
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE       := fstab.qcom.lvm
+LOCAL_MODULE_TAGS  := optional eng
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := etc/lvm/fstab.qcom
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE       := lvm
 LOCAL_MODULE_TAGS  := optional eng
 LOCAL_MODULE_CLASS := EXECUTABLES
@@ -67,28 +91,4 @@ LOCAL_MODULE_TAGS  := optional eng
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := etc/lvm/lvm.conf
 LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)/lvm/etc
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE       := lvm_init.sh
-LOCAL_MODULE_TAGS  := optional eng
-LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_SRC_FILES    := etc/lvm/lvm_init.sh
-LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE       := lvm_symlinks.sh
-LOCAL_MODULE_TAGS  := optional eng
-LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_SRC_FILES    := etc/lvm/lvm_symlinks.sh
-LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE       := lvm_setprop.sh
-LOCAL_MODULE_TAGS  := optional eng
-LOCAL_MODULE_CLASS := EXECUTABLES
-LOCAL_SRC_FILES    := etc/lvm/lvm_setprop.sh
-LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)

@@ -20,6 +20,10 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 # System properties
 -include $(LOCAL_PATH)/system_prop.mk
 
+# Init
+PRODUCT_PACKAGES += \
+    libinit_find7 
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom.std \
@@ -30,9 +34,8 @@ PRODUCT_PACKAGES += \
     init.fs.rc.lvm \
     init.qcom.rc \
     init.qcom.usb.rc \
-    lvm_init.sh \
-    lvm_setprop.sh \
-    lvm_symlinks.sh
+    storage_earlyinit.sh \
+    storage_init.sh
 
 # Audio
 PRODUCT_COPY_FILES += \

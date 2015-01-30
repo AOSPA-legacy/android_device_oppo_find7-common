@@ -17,41 +17,34 @@
 import /init.qcom-common.rc
 
 on early-init
-    # LVM: set up LVM volumes
-
-    #First wait for the physical volumes to be available.  Init appears to
-    #start before the MMC driver comes up and creates the block devices
+    # wait until data is available
     wait /dev/block/platform/msm_sdcc.1/by-name/userdata
     wait /dev/block/platform/msm_sdcc.1/by-name/sdcard
-    
-    #Scan for LVM partitions.  Our lvm.conf restricts this to the userdata and sdcard partitions
+
+    # scan for LVM partitions.  Our lvm.conf restricts this to the userdata and sdcard partitions
     exec /sbin/lvm vgscan --mknodes --ignorelockingfailure
-    
-    #Activate any partitions found
+    # activate any partitions found
     exec /sbin/lvm vgchange -aly --ignorelockingfailure
 
     # copy fstab and init.rc depending on storage layout
     exec /sbin/static/busybox sh /storage_earlyinit.sh
 
 on fs
-   #This will safely error out on non-lvm configs
+    # this will safely error out on non-lvm configs
     restorecon /dev/mapper/lvpool-userdata
     
-    mount_all ./fstab.qcom
+    mount_all /fstab.qcom
     restorecon_recursive /persist
     setprop ro.crypto.fuse_sdcard true
 
 on init
-
-    chmod 0701 /mnt/media_rw
-
     mkdir /mnt/shell/emulated 0700 shell shell
     mkdir /storage 0550 system sdcard_r
     mkdir /storage/emulated 0555 root root
 
-    #External storage directories
-    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
-    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    # External storage directories
+    mkdir /mnt/media_rw/sdcard0 0755 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard1 0755 media_rw media_rw
     mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
 
     # export environmental values, depending on if we are unified or not
@@ -61,16 +54,6 @@ on init
     mkdir /storage/sdcard1 0700 root root
     mkdir /storage/usbdisk 0700 root root
 
-    export EXTERNAL_STORAGE /storage/emulated/legacy
-    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
-    export EMULATED_STORAGE_TARGET /storage/emulated
-    export SECONDARY_STORAGE /storage/sdcard1:/storage/usbdisk
-
-    # for backwards compatibility
-    symlink /storage/emulated/legacy /sdcard
-    symlink /storage/emulated/legacy /mnt/sdcard
-    symlink /storage/emulated/legacy /storage/sdcard0
-    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
     symlink /storage/sdcard1 /extSdCard
     symlink /storage/sdcard1 /mnt/extSdCard
     symlink /storage/sdcard1 /external_sd
@@ -78,15 +61,9 @@ on init
     symlink /storage/usbdisk /mnt/usbdisk
 
     # initialize storage depending on if we are unified or not
-    exec /sbin/static/busybox sh /lvm_symlinks.sh
+    exec /sbin/static/busybox sh /storage_init.sh
 
-on early-boot
-    #Last phase of LVM configuration.  setprop requires property service
-    #to be started so we can't put it in lvm_init.sh or lvm_symlinks.sh
-    #Currently we're using the system shell as /system is mounted,
-    #but this may need to be reworked to use toolbox+sh to support
-    #recovery
-    exec /system/bin/logwrapper /system/bin/sh /lvm_setprop.sh
+
 
 on boot
     # For find7s notification LED
@@ -108,14 +85,14 @@ on post-fs-data
     chown system camera /sys/devices/qcom,camera-led-flash.81/test
     chmod 0660 /sys/devices/qcom,camera-led-flash.81/test
 
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+    class late_start
+
 service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/sdcard0 /storage/sdcard0
     class late_start
     disabled
 
-service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
-    class late_start
-
-service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/sdcard1 /storage/sdcard1
     class late_start
     disabled
 
@@ -132,3 +109,14 @@ on nonencrypted
 
 on property:vold.decrypt=trigger_restart_framework
     setprop ro.fuse_sdcard ${persist.fuse_sdcard}
+
+# Override storage list for MountService according to detected
+# storage layout.
+
+on property:ro.oppo.layout=lvm
+    setprop ro.storage_list.override storage_list_lvm
+
+# This can be removed once there are no more special unified builds
+# and the default layout is always the standard layout.
+on property:ro.oppo.layout=standard
+    setprop ro.storage_list.override storage_list_std

@@ -1,23 +1,30 @@
-#These are used to set up LVM
-
-import /init.recovery-common.qcom.rc
-
-on early-init
-# set up LVM volumes
-    wait /dev/block/platform/msm_sdcc.1/by-name/userdata
-    wait /dev/block/platform/msm_sdcc.1/by-name/sdcard
-    start lvm_init
-
-service lvm_init /sbin/lvm_init_recovery.sh
-    oneshot
-    disabled
-
 #These are used to handle find7a vs. find7s
 #and used to be in init.recovery.rc in device/oppo/msm8974-common
+
+on early-init
+    #First wait for the physical volumes to be available.  Init appears to
+    #start before the MMC driver comes up and creates the block devices
+    wait /dev/block/platform/msm_sdcc.1/by-name/userdata
+    wait /dev/block/platform/msm_sdcc.1/by-name/sdcard
+
+    # scan for LVM partitions.  Our lvm.conf restricts this to the userdata and sdcard partitions
+    exec /sbin/lvm vgscan --mknodes --ignorelockingfailure
+    # activate any partitions found
+    exec /sbin/lvm vgchange -aly --ignorelockingfailure
 
 service qhdcp /sbin/qhdcp.sh
     oneshot
     disabled
 
 on property:ro.oppo.device=find7s
+    setprop ro.product.device find7s
     start qhdcp
+
+on property:ro.oppo.device=find7
+    setprop ro.product.device find7
+
+on property:ro.oppo.layout=lvm
+   symlink /etc/twrp.fstab.lvm /etc/twrp.fstab
+
+on property:ro.oppo.layout=standard
+   symlink /etc/twrp.fstab.std /etc/twrp.fstab

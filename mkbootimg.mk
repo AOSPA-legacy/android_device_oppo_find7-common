@@ -49,7 +49,6 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(INSTALLED_DTIMAGE_TARGET) \
 	@echo -e ${CL_CYN}"----- Copying configuration files ------"${CL_RST}
 	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/init.recovery.target.rc $(TARGET_RECOVERY_ROOT_OUT)
 	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/qhdcp.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin
-	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/lvm_init_recovery.sh $(TARGET_RECOVERY_ROOT_OUT)/sbin
 	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/twrp.fstab.std $(TARGET_RECOVERY_ROOT_OUT)/etc
 	$(hide) cp $(LOCAL_PATH)/rootdir/recovery/twrp.fstab.lvm $(TARGET_RECOVERY_ROOT_OUT)/etc
 	## TWRP build are universal for find7s/find7a, unified/non-unified

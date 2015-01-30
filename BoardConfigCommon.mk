@@ -50,6 +50,9 @@ TARGET_RELEASETOOLS_EXTENSIONS := device/oppo/find7-common
 # Sepolicy
 BOARD_SEPOLICY_DIRS += \
     device/oppo/find7-common/sepolicy
+    
+BOARD_SEPOLICY_UNION += \
+    init.te
 
 # Inherit from the proprietary version
 -include vendor/oppo/find7/BoardConfigVendor.mk

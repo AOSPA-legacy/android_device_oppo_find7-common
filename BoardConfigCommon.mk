@@ -52,7 +52,7 @@ BOARD_SEPOLICY_DIRS += \
     device/oppo/find7-common/sepolicy
     
 BOARD_SEPOLICY_UNION += \
-    init.te
+    init.te \
     init_shell.te
 
 # Inherit from the proprietary version

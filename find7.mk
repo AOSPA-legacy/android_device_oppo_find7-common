@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+TARGET_CONTINUOUS_SPLASH_ENABLED := true
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
